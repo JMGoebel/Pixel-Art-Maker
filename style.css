@@ -1,4 +1,4 @@
-/* Material Design Colors */
+/* ========== Material Design Colors ========== */
 .red {
   background-color: #F34336;
 }
@@ -85,6 +85,8 @@ main {
   box-sizing: border-box;
 }
 
+/* ========== ASIDE ========== */
+
 aside {
   background-color: #3E464C;
   position: absolute;
@@ -96,10 +98,26 @@ aside {
   border-right: 1px solid black;
 }
 
+#drag-bar {
+  position: absolute;
+  width: 20px;
+  height: 100vh;
+  top: 0;
+  left: 180px;
+  background-color: #3e3e3f;
+  box-sizing: border-box;
+  border-right: 1px solid black;
+}
+
 #logo {
   margin: 20px;
   width: 140px;
   height: 140px;
-  background-image: url("http://via.placeholder.com/140x140") 
+  /* temp background image */
+  background-image: url("http://via.placeholder.com/140x140"); 
 }
 
+#palette {
+  margin: 20px;
+  width: 140px;
+}
