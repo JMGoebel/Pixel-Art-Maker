@@ -1,51 +1,104 @@
-function initialize (rows, cols) {
-  let rows = rows || 20;
-  let cols = cols || 20;
-  let cell_size = 20;
-}
+// (ARRAY)  Palette of color to be used
+const PALETTE = [ "red", "pink", "black", "purple", "deep-purple", "indigo",
+                  "blue", "light-blue", "cyan", "teal", "green", "light-green",
+                  "lime", "yellow", "amber", "orange", "deep-orange", "brown",
+                  "grey", "blue-grey", "white" ];
+const WIN = $( window );
+const GRID = {
+  grid: $( "main" ),    // (NODE)   The grid container
+  width: 0,             // (NUMBER) The width of the container
+  height: 0,            // (NUMBER) The height of the container
+  cell_size: 20,        // (NUMBER) Size of grid cells
+  rows: 20,             // (NUMBER) Number of rows
+  cols: 20,             // (NUMBER) Number of cols
+  drawable: false,      // (BOOL)   Can the grid cells be drawn to
+  color: "red",         // (STRING) The currently selected color
+  set_container: function () {
+    this.width = this.cols * this.cell_size;
+    this.height = this.cols * this.cell_size;
+    this.grid.css({
+      width: this.width + "px",
+      height: this.height + "px"
+    });
+  },
+  center_container: function () {
+    let top = (WIN.height() / 2) - (this.height / 2);
+    let left = ((WIN.width()) / 2) - (this.width / 2);
+    console.log(top, left);
+    this.grid.css({
+      top: top + "px",
+      left: left + "px"
+    })
+  },
+  draw: function (self) {
+    var curColor = ( $( self ).attr( "class" ) ).split(' ')[1];
+    if (curColor != this.color || curColor == "clear"){
+      $( self ).removeClass(curColor);
+    }
+    $( self ).addClass(this.color);
+  },
+  set_events: function () {
+    // Start Drawing
+    $( "main" ).on( "mousedown", ".griddle", function( evt ) {
+      evt.preventDefault();
+      GRID.drawable = true;
+      if( GRID.drawable ) { GRID.draw( $( this ) ); }
+    });
 
-function center_grid(rows, cols){
-  let grid = $( "main" );
-  let winX = $( window ).width();
-  let winY = $( window ).height();
-  grid.css({
-    "width": (20 * 20) + "px",
-    "height": (20 * 20) + "px",
-  });
-  grid.css({
-    "top": ((winY/2)-(parseInt(grid.css("height"))/2)),
-    "left": ((winX/2)-(parseInt(grid.css("width"))/2))
-  })  
-  console.log(winX, winY)
-}
+    // Draw when crossing to new cell
+    $( "main" ).on( "mouseover", ".griddle", function() {
+      if( GRID.drawable ) { GRID.draw( $( this ) ); }
+    });
 
-function set_cells(rows, cols){
-  for(let r = 0; r < rows; r++)
-    for(let c = 0; c < cols; c++)
-      $( "main" ).append("<div class='griddle'></div>");
-}
-
-center_grid();
-set_cells(20,20);
-
-let draw = false;
-let color = "red"
-$( "main" ).on("mousedown", ".griddle", function(evt) {
-  evt.preventDefault();
-  $( this ).addClass(color);
-  draw = true;
-})
-
-$( "main" ).on("mouseup", ".griddle", function() {
-  draw = false;
-})
-
-$( "main" ).on("click", ".griddle", function() {
-  $( this ).addClass(color);
-})
-
-$( "main" ).on("mouseover", ".griddle", function() {
-  if (draw){
-    $( this ).addClass(color);
+    // Disable drawing no matter where the mouse button is released.
+    $( document ).on( "mouseup", function() {
+      GRID.drawable = false;
+    });
+  },
+  initialize: function () {
+    this.set_container();
+    this.center_container();
+    set_cells(this.rows, this.cols, this.cell_size, this.grid);
+    this.set_events();
   }
-})
+};
+
+//// HELPER FUNCTIONS
+// Makes a group of divs with the .griddle class
+function set_cells(rows, cols, size, location){
+  for(let r = 0; r < rows; r++){
+    for(let c = 0; c < cols; c++){
+      $( location ).append("<div class='griddle'></div>");
+      var cell = $( location ).children().last();
+      cell.css({ 
+        width: size + "px",
+        height: size + "px"
+      });
+    }
+  }
+}
+
+//// ASIDE FUNCTIONS
+// Used to add colors to palette
+function colorize_palette (color_palette) {
+  var cells = $( "#palette" ).children();
+  cells.each(function(x){
+    if ( color_palette[x] === undefined){
+      $( this ).addClass("clear");
+    } else {
+      $( this ).addClass(color_palette[x]);
+    }
+  });
+}
+
+////// EVENT LISTENERS
+//// Grid Listeners
+//// Palette Listeners
+$( "#palette" ).on( "click", ".griddle", function() {
+  var getColor = ($( this ).attr ("class" ));
+  GRID.color = getColor.split(' ')[1];
+});
+////// INITIALIZE
+set_cells( 4, 6, 35, "#palette");
+colorize_palette(PALETTE);
+GRID.initialize();
