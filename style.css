@@ -63,12 +63,26 @@
   background-color: #607C8A;
 }
 
+.griddle {
+  display: block;
+  float: left;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  border: 1px solid black;
+}
+
+.hidden {
+  background-color: red;
+}
+
 body {
   background-color: #374046;
 }
 
 main {
   position: absolute;
+  box-sizing: border-box;
 }
 
 aside {
@@ -80,4 +94,9 @@ aside {
   height: 100vh;
   box-sizing: border-box;
   border-right: 1px solid black;
+}
+
+div {
+  margin: 0;
+  padding: 0;
 }
