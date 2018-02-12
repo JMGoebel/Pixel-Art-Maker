@@ -1,8 +1,8 @@
 // (ARRAY)  Palette of color to be used
-const PALETTE = [ "red", "pink", "black", "purple", "deep-purple", "indigo",
+const PALETTE = [ "red", "pink", "purple", "deep-purple", "indigo",
                   "blue", "light-blue", "cyan", "teal", "green", "light-green",
                   "lime", "yellow", "amber", "orange", "deep-orange", "brown",
-                  "grey", "blue-grey", "white" ];
+                  "grey", "blue-grey", "white",  "black" ];
 const WIN = $( window );
 const GRID = {
   grid: $( "main" ),    // (NODE)   The grid container
@@ -56,6 +56,7 @@ const GRID = {
     });
   },
   initialize: function () {
+    this.grid.empty();
     this.set_container();
     this.center_container();
     set_cells(this.rows, this.cols, this.cell_size, this.grid);
@@ -66,16 +67,17 @@ const GRID = {
 //// HELPER FUNCTIONS
 // Makes a group of divs with the .griddle class
 function set_cells(rows, cols, size, location){
+  let frag = document.createDocumentFragment();
+  let style = "width:" + size + "px; height:" + size + "px";
   for(let r = 0; r < rows; r++){
     for(let c = 0; c < cols; c++){
-      $( location ).append("<div class='griddle'></div>");
-      var cell = $( location ).children().last();
-      cell.css({ 
-        width: size + "px",
-        height: size + "px"
-      });
+      let cell = document.createElement("div");
+      cell.className = "griddle";
+      cell.style.cssText = style;
+      $( frag ).append( cell) ;
     }
   }
+  $( location ).append( frag );
 }
 
 //// ASIDE FUNCTIONS
@@ -92,7 +94,20 @@ function colorize_palette (color_palette) {
 }
 
 ////// EVENT LISTENERS
-//// Grid Listeners
+//// Input Number Listeners
+$( "#i_set-grid" ).on( "click", function(){
+  let rows = $( "#i_rows" )[0].value;
+  let cols = $( "#i_cols" )[0].value;
+  if ( rows >= 1  && cols >= 1 ){
+    GRID.cols = cols;
+    GRID.rows = rows;
+    GRID.initialize();
+  } else {
+    $( "#i_rows" )[0].value = 20;
+    $( "#i_cols" )[0].value = 20;
+  }
+})
+
 //// Palette Listeners
 $( "#palette" ).on( "click", ".griddle", function() {
   var getColor = ($( this ).attr ("class" ));

@@ -113,11 +113,37 @@ aside {
   margin: 20px;
   width: 140px;
   height: 140px;
-  /* temp background image */
-  background-image: url("http://via.placeholder.com/140x140"); 
 }
 
 #palette {
   margin: 20px;
   width: 140px;
+}
+
+#settings {
+  margin: 20px;
+  width: 140px;
+}
+
+label {
+  display: inline-block;
+  width: 60px;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #FEFEFE;
+}
+
+input[type='number'] {
+  width: 80px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+button {
+  margin: 5px 60px;
+  width: 80px;
+}
+
+.clearfix {
+  clear: both;
 }
